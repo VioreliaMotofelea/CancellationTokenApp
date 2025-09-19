@@ -24,9 +24,6 @@
             }
         }
 
-        /* oprire după 4.5s => foloseste CancellationTokenSource.CancelAfter
-         dotnet run -- --timed
-         */
         private static async Task RunTimedAsync(TimeSpan duration) 
         {
             using var cts = new CancellationTokenSource(duration);
@@ -35,20 +32,16 @@
             Console.WriteLine("Unreachable");
         }
 
-        /* Ctrl-C pentru stop => anulare via Console.CancelKeyPress
-         dotnet run -- --ctrlc
-         */
         private static async Task RunUntilCtrlCAsync()
         {
             using var cts = new CancellationTokenSource();
 
-            Console.CancelKeyPress += (s, e) =>
+            Console.CancelKeyPress += (sender, e) =>
             {
                 e.Cancel = true;
                 if (!cts.IsCancellationRequested)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("apasat Ctrl-C: anulare ceruta si oprire");
+                    Console.WriteLine("\napasat Ctrl-C: anulare ceruta si oprire");
                     cts.Cancel();
                 }
             };
